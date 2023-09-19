@@ -1,14 +1,23 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { User } from './users.entity';
+// import {
+//   Column,
+//   Entity,
+//   PrimaryGeneratedColumn,
+//   ManyToOne,
+//   JoinColumn,
+// } from 'typeorm';
+// import { User } from './users.entity';
+// import { IsNotEmpty } from 'class-validator';
 
-@Entity()
-export class Password {
-  @PrimaryGeneratedColumn()
-  id: number;
+// @Entity()
+// export class Password {
+//   @PrimaryGeneratedColumn()
+//   id: number;
 
-  @Column()
-  passwords: string;
+//   @IsNotEmpty()
+//   @Column()
+//   passwords: string;
 
-  @ManyToOne(() => User, (user) => user.password)
-  user: User;
-}
+//   @ManyToOne(() => User, (user) => user.password)
+//   @JoinColumn({ name: 'User.id' })
+//   user: User;
+// }
