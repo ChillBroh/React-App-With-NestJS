@@ -93,10 +93,14 @@ export class UsersService {
       if (response.affected === 0) {
         throw new Error();
       }
-
       return 'User Deleted';
     } catch (err) {
       throw new BadRequestException('Failed to delete user');
     }
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const response = this.userRepository.findOneBy({ email });
+    return response;
   }
 }

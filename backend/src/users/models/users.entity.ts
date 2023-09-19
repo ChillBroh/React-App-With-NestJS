@@ -10,7 +10,7 @@ import { IsNotEmpty, IsString, IsPhoneNumber, IsEmail } from 'class-validator';
 // import { Password } from './password.entity';
 
 @Entity()
-@Unique(['email'])
+@Unique(['email', 'userName'])
 export class User {
   @PrimaryGeneratedColumn()
   id: string;
