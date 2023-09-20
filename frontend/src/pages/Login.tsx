@@ -3,27 +3,53 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Checkbox, Form, Input } from "antd";
 import Link from "antd/es/typography/Link";
 import Button from "../components/Button";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const onFinish = (values: any) => {
-    console.log("Received values of form: ", values);
+  const navigate = useNavigate();
+  const [form] = Form.useForm();
+  const handleSubmit = async (values: any) => {
+    try {
+      const { email, password } = values;
+      const response = await axios.post("http://localhost:5000/auth", {
+        email,
+        password,
+      });
+      console.log(response);
+      const token: string = response.data.access_token;
+      navigate(`/welcome/${token}`);
+    } catch (err: any) {
+      alert(err.response.data.message);
+    }
   };
   return (
     <div className="mt-16 mx-auto max-w-2xl px-4 py-10 sm:px-4 sm:py-15 lg:max-w-7xl lg:px-8">
+      <p className="text-3xl text-center mb-10">Login</p>
       <div className="flex  justify-center">
         <Form
+          form={form}
           name="normal_login"
           className="login-form"
           initialValues={{ remember: true }}
-          onFinish={onFinish}
+          onFinish={handleSubmit}
         >
           <Form.Item
-            name="username"
-            rules={[{ required: true, message: "Please input your Username!" }]}
+            name="email"
+            rules={[
+              {
+                type: "email",
+                message: "The input is not valid E-mail!",
+              },
+              {
+                required: true,
+                message: "Please input your E-mail!",
+              },
+            ]}
           >
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}
-              placeholder="Username"
+              placeholder="Email"
             />
           </Form.Item>
           <Form.Item
