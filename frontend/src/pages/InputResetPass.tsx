@@ -1,12 +1,11 @@
-import React, { useEffect } from "react";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Checkbox, Form, Input } from "antd";
-import Link from "antd/es/typography/Link";
+import { LockOutlined } from "@ant-design/icons";
+import { Form, Input } from "antd";
 import Button from "../components/Button";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 const InputResetPass = () => {
+  const navigate = useNavigate();
   const { email } = useParams();
   const [form] = Form.useForm();
 
@@ -24,6 +23,7 @@ const InputResetPass = () => {
       throw new Error("User Password Not updated");
     }
     alert("User Password updated");
+    navigate("/login");
   };
   return (
     <div className="mt-16 mx-auto max-w-2xl px-4 py-10 sm:px-4 sm:py-15 lg:max-w-7xl lg:px-8">

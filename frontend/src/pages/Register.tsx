@@ -61,9 +61,10 @@ const Register = () => {
           password: password,
         }
       );
+      console.log(response);
       setLoading(false);
       alert("Registration successful:");
-   
+
       navigate("/login");
     } catch (error: any) {
       alert(error.response.data.message);

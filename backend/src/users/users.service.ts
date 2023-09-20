@@ -8,7 +8,6 @@ import { User } from './models/users.entity';
 import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Password } from './models/password.entity';
-import { getConnection } from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -44,9 +43,7 @@ export class UsersService {
         passwords: hash,
         user: response,
       });
-      const savedPassword = await this.dataSource
-        .getRepository(Password)
-        .save(newPassword);
+      await this.dataSource.getRepository(Password).save(newPassword);
 
       return 'user Sucessfully created';
     } catch (err) {
