@@ -31,6 +31,12 @@ export class UsersController {
     return response;
   }
 
+  @Post('reset/email-find')
+  async getEmailUser(@Body('email') email: string) {
+    const response = await this.userService.findOneByEmail(email);
+    return response;
+  }
+
   @Patch(':id')
   async updateUser(@Body() user: User, @Param() id: number) {
     const response = await this.userService.updateUser(user, id);
@@ -48,6 +54,7 @@ export class UsersController {
     @Body('email') email: string,
     @Body('password') password: string,
   ) {
+    console.log(email, password);
     const response = await this.userService.passwordRest(email, password);
     return response;
   }

@@ -118,9 +118,18 @@ export class UsersService {
     }
   }
 
+  async findOneByEmail(email: string): Promise<User> {
+    const user = await this.dataSource.getRepository(User).findOneBy({ email });
+    if (user === null) {
+      throw new NotFoundException();
+    }
+    console.log(user);
+    return user;
+  }
+
   async getPassByEmail(email: string): Promise<Password | undefined> {
     // Find the user by email
-    const user = await this.dataSource.getRepository(User).findOneBy({ email });
+    const user = await this.findOneByEmail(email);
 
     if (user) {
       const password = await this.dataSource.getRepository(Password).findOneBy({
@@ -135,6 +144,7 @@ export class UsersService {
   async passwordRest(email: string, password: string): Promise<Password> {
     const user = await this.dataSource.getRepository(User).findOneBy({ email });
     const hash = await this.hashedPassword(password);
+    console.log(user);
 
     const savedPassword = await this.dataSource.getRepository(Password).create({
       passwords: hash,

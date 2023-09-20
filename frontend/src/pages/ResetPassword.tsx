@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Checkbox, Form, Input } from "antd";
 import Link from "antd/es/typography/Link";
@@ -6,27 +6,30 @@ import Button from "../components/Button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const ResetPassword = () => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
-  const handleSubmit = async (values: any) => {
+
+  const handleSubmit = async (value: any) => {
     try {
-      const { email, password } = values;
-      const response = await axios.post("http://localhost:5000/auth", {
-        email,
-        password,
-      });
-      console.log(response);
-      const token: string = response.data.access_token;
-      navigate(`/welcome/${token}`);
+      const { email } = value;
+      const response = await axios.post(
+        "http://localhost:5000/users/reset/email-find",
+        {
+          email,
+        }
+      );
+
+      navigate(`/password-enter/${email}`);
     } catch (err: any) {
       alert(err.response.data.message);
+      return;
     }
   };
   return (
     <div className="mt-16 mx-auto max-w-2xl px-4 py-10 sm:px-4 sm:py-15 lg:max-w-7xl lg:px-8">
-      <p className="text-3xl text-center mb-10">Login</p>
-      <div className="flex  justify-center">
+      <p className="text-3xl text-center mb-10">Password Reset</p>
+      <div>
         <Form
           form={form}
           name="normal_login"
@@ -52,27 +55,8 @@ const Login = () => {
               placeholder="Email"
             />
           </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: "Please input your Password!" }]}
-          >
-            <Input
-              prefix={<LockOutlined className="site-form-item-icon" />}
-              type="password"
-              placeholder="Password"
-            />
-          </Form.Item>
           <Form.Item>
-            <Form.Item name="remember" valuePropName="checked" noStyle>
-              <Checkbox>Remember me</Checkbox>
-            </Form.Item>
-            <Link href="/forgot-password" className="login-form-forgot">
-              Forgot password
-            </Link>
-          </Form.Item>
-          <Form.Item>
-            <Button name="Login" /> Or{" "}
-            <Link href="/register">register now!</Link>
+            <Button name="Find Acoount" type="submit" />
           </Form.Item>
         </Form>
       </div>
@@ -80,4 +64,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ResetPassword;
