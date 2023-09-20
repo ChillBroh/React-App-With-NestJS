@@ -16,7 +16,7 @@ import { ConfigModule } from '@nestjs/config';
       database: process.env.POSTGRES_DATABASE,
       synchronize: true,
       autoLoadEntities: true,
-      entities: [__dirname + 'entities/**/*.entity.ts'],
+      entities: [__dirname + '/users/models/**/*.entity.ts'],
     }),
     AuthModule,
     UsersModule,

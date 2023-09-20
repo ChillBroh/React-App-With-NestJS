@@ -14,11 +14,11 @@ import { User } from './models/users.entity';
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
-  @Post('add-user')
-  async createUser(@Body() user: User) {
-    const response = await this.userService.createUser(user);
-    return response;
-  }
+  // @Post('add-user')
+  // async createUser(@Body() user: User) {
+  //   const response = await this.userService.createUser(user);
+  //   return response;
+  // }
   @Get()
   async getAllUsers() {
     const response = await this.userService.getAllUsers();
