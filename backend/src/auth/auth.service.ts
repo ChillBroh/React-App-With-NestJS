@@ -11,19 +11,19 @@ export class AuthService {
   ) {}
 
   async signIn(email: string, password: string): Promise<any> {
-    try {
-      const userFound = await this.userService.getUserByEmail(email);
-      const isMatch = await bcrypt.compare(password, userFound.password);
-      if (!isMatch) {
-        throw new Error();
-      }
-
-      const payload = { sub: userFound.email, userName: userFound.email };
-      return {
-        access_token: await this.jwtService.signAsync(payload),
-      };
-    } catch (err) {
+    const passwordFound = await this.userService.getPassByEmail(email);
+    if (!passwordFound) {
+      return 'No User found';
+    }
+    console.log(passwordFound.passwords);
+    const isMatch = await bcrypt.compare(password, passwordFound.passwords);
+    if (!isMatch) {
       throw new UnauthorizedException();
     }
+
+    const payload = { sub: email, userName: password };
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
   }
 }

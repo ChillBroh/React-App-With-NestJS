@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   Unique,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 // import { Password } from './password.entity';
 import { IsNotEmpty, IsString, IsPhoneNumber, IsEmail } from 'class-validator';
@@ -43,10 +44,10 @@ export class User {
   @IsString()
   lastName: string;
 
-  // @OneToMany(() => Password, (password) => password.user)
-  // password: Password[];
-  @Column()
-  @IsNotEmpty()
-  @IsString()
-  password: string;
+  @OneToMany(() => Password, (password) => password.user)
+  password: Password[];
+  // @Column()
+  // @IsNotEmpty()
+  // @IsString()
+  // password: string;
 }

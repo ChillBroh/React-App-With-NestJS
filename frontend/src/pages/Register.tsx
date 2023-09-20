@@ -1,7 +1,7 @@
 import { Checkbox, Form, Input, Select } from "antd";
 import Button from "../components/Button";
 import Link from "antd/es/typography/Link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import Loader from "../components/Loader";
 import { useNavigate } from "react-router-dom";

@@ -11,7 +11,6 @@ import { UsersService } from 'src/users/users.service';
 
 @Module({
   imports: [
-    UsersModule,
     TypeOrmModule.forFeature([User]), // ConfigModule.forRoot({ isGlobal: true }),
     UsersModule,
     JwtModule.register({

@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  CreateDateColumn,
 } from 'typeorm';
 import { User } from './users.entity';
 import { IsNotEmpty } from 'class-validator';
@@ -16,6 +17,9 @@ export class Password {
   @IsNotEmpty()
   @Column()
   passwords: string;
+
+  @CreateDateColumn() d;
+  timestamp: Date;
 
   @ManyToOne(() => User, (user) => user.password)
   @JoinColumn()

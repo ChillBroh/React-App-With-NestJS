@@ -42,4 +42,13 @@ export class UsersController {
     const response = await this.userService.deleteUser(id);
     return response;
   }
+
+  @Post('reset-user')
+  async resetUser(
+    @Body('email') email: string,
+    @Body('password') password: string,
+  ) {
+    const response = await this.userService.passwordRest(email, password);
+    return response;
+  }
 }
