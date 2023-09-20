@@ -16,7 +16,7 @@ const Login = () => {
         email,
         password,
       });
-      console.log(response);
+
       const token: string = response.data.access_token;
       navigate(`/welcome/${token}`);
     } catch (err: any) {

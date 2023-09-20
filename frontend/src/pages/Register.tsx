@@ -63,7 +63,7 @@ const Register = () => {
       );
       setLoading(false);
       alert("Registration successful:");
-      console.log(response);
+   
       navigate("/login");
     } catch (error: any) {
       alert(error.response.data.message);

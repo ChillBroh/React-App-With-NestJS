@@ -8,6 +8,7 @@ import { User } from './models/users.entity';
 import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Password } from './models/password.entity';
+import { getConnection } from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -28,7 +29,7 @@ export class UsersService {
       const pass: any = user.password;
       const hash = await this.hashedPassword(pass);
 
-      const newUser = this.dataSource.getRepository(User).create({
+      const newUser = await this.dataSource.getRepository(User).create({
         userName: user.userName,
         email: user.email,
         mobile: user.mobile,
@@ -39,7 +40,7 @@ export class UsersService {
       const response = await this.dataSource.getRepository(User).save(newUser);
 
       //savve hashed passwrd to db
-      const newPassword = this.dataSource.getRepository(Password).create({
+      const newPassword = await this.dataSource.getRepository(Password).create({
         passwords: hash,
         user: response,
       });
@@ -52,7 +53,7 @@ export class UsersService {
       if (err.code === '23505') {
         throw new ForbiddenException('Email is already in use.');
       }
-      throw err;
+      throw new BadRequestException('Failed to create user.');
     }
   }
 
@@ -84,8 +85,6 @@ export class UsersService {
 
   async updateUser(user: User, id: number): Promise<any> {
     try {
-      console.log(user);
-
       const response = await this.dataSource
         .getRepository(User)
         .update(id, user);
@@ -123,41 +122,50 @@ export class UsersService {
     if (user === null) {
       throw new NotFoundException();
     }
-    console.log(user);
+
     return user;
   }
 
   async getPassByEmail(email: string): Promise<Password | undefined> {
-    // Find the user by email
     const user = await this.findOneByEmail(email);
 
     if (user) {
-      const password = await this.dataSource.getRepository(Password).findOneBy({
-        user: user,
+      const password = await this.dataSource.getRepository(Password).find({
+        where: { user: user },
+        order: { d: 'DESC' },
       });
-      return password;
+
+      const latestPassword = password[0];
+      return latestPassword;
     }
 
     return undefined;
   }
 
   async passwordRest(email: string, password: string): Promise<Password> {
-    const user = await this.dataSource.getRepository(User).findOneBy({ email });
-    const hash = await this.hashedPassword(password);
-    console.log(user);
+    try {
+      const user = await this.dataSource
+        .getRepository(User)
+        .findOneBy({ email });
+      const hash = await this.hashedPassword(password);
 
-    const savedPassword = await this.dataSource.getRepository(Password).create({
-      passwords: hash,
-      user: user,
-    });
+      const savedPassword = await this.dataSource
+        .getRepository(Password)
+        .create({
+          passwords: hash,
+          user: user,
+        });
 
-    const response = await this.dataSource
-      .getRepository(Password)
-      .save(savedPassword);
+      const response = await this.dataSource
+        .getRepository(Password)
+        .save(savedPassword);
 
-    if (!response) {
-      throw new ForbiddenException();
+      if (!response) {
+        throw new ForbiddenException('Failed to reset password.');
+      }
+      return savedPassword;
+    } catch (err) {
+      throw new ForbiddenException('Failed to reset password.');
     }
-    return savedPassword;
   }
 }

@@ -15,7 +15,7 @@ export class AuthService {
     if (!passwordFound) {
       return 'No User found';
     }
-    console.log(passwordFound.passwords);
+
     const isMatch = await bcrypt.compare(password, passwordFound.passwords);
     if (!isMatch) {
       throw new UnauthorizedException();

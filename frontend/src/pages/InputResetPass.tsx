@@ -13,10 +13,17 @@ const InputResetPass = () => {
   const handleSubmit = async (value: any) => {
     const { password } = value;
 
-    const response = axios.post("http://localhost:5000/users/reset-user", {
-      email,
-      password,
-    });
+    const response = await axios.post(
+      "http://localhost:5000/users/reset-user",
+      {
+        email,
+        password,
+      }
+    );
+    if (!response.data) {
+      throw new Error("User Password Not updated");
+    }
+    alert("User Password updated");
   };
   return (
     <div className="mt-16 mx-auto max-w-2xl px-4 py-10 sm:px-4 sm:py-15 lg:max-w-7xl lg:px-8">

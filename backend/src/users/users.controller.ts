@@ -54,8 +54,13 @@ export class UsersController {
     @Body('email') email: string,
     @Body('password') password: string,
   ) {
-    console.log(email, password);
     const response = await this.userService.passwordRest(email, password);
     return response;
   }
+
+  // @Post('login/check-pass')
+  // async passwordGet(@Body() user: User) {
+  //   const response = await this.userService.customQueryToGetPassword(user);
+  //   return response;
+  // }
 }
