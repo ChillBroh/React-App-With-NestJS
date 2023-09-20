@@ -8,7 +8,7 @@ import {
 
 const Footer = () => {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col mt-52">
       <main className="flex-grow">{/* Your page content goes here */}</main>
       <footer className="bg-black py-16 px-10 text-gray-300">
         <div className="container mx-auto">
