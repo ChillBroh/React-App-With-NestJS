@@ -43,10 +43,10 @@ export class User {
   @IsString()
   lastName: string;
 
-  @OneToMany(() => Password, (password) => password.user)
-  password: Password[];
-  // @Column()
-  // @IsNotEmpty()
-  // @IsString()
-  // password: string;
+  // @OneToMany(() => Password, (password) => password.user)
+  // password: Password[];
+  @Column()
+  @IsNotEmpty()
+  @IsString()
+  password: string;
 }

@@ -5,12 +5,12 @@ import { AuthService } from './auth.service';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-  // @Get()
-  // signInUser(
-  //   @Body('email') email: string,
-  //   @Body('password') password: string,
-  // ): Promise<User> {
-  //   const response = this.authService.signIn(email, password);
-  //   return response;
-  // }
+  @Get()
+  signInUser(
+    @Body('email') email: string,
+    @Body('password') password: string,
+  ): Promise<User> {
+    const response = this.authService.signIn(email, password);
+    return response;
+  }
 }

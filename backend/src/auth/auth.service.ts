@@ -10,20 +10,20 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  // async signIn(email: string, password: string): Promise<any> {
-  //   try {
-  //     const userFound = await this.userService.getUserByEmail(email);
-  //     const isMatch = await bcrypt.compare(password, userFound.password);
-  //     if (!isMatch) {
-  //       throw new Error();
-  //     }
+  async signIn(email: string, password: string): Promise<any> {
+    try {
+      const userFound = await this.userService.getUserByEmail(email);
+      const isMatch = await bcrypt.compare(password, userFound.password);
+      if (!isMatch) {
+        throw new Error();
+      }
 
-  //     const payload = { sub: userFound.email, userName: userFound.email };
-  //     return {
-  //       access_token: await this.jwtService.signAsync(payload),
-  //     };
-  //   } catch (err) {
-  //     throw new UnauthorizedException();
-  //   }
-  // }
+      const payload = { sub: userFound.email, userName: userFound.email };
+      return {
+        access_token: await this.jwtService.signAsync(payload),
+      };
+    } catch (err) {
+      throw new UnauthorizedException();
+    }
+  }
 }
