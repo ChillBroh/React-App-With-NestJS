@@ -161,10 +161,10 @@ export class UsersService {
         .findOneBy({ email });
       const hash = await this.hashedPassword(password);
 
-      const passwords = await this.dataSource
-        .getRepository(password)
-        .findBy({ userId: user.id });
-      console.log(passwords);
+      // const passwords = await this.dataSource
+      //   .getRepository(password)
+      //   .findBy({ userId: user.id });
+      // console.log(passwords);
 
       const savedPassword = await this.dataSource
         .getRepository(Password)
