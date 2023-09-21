@@ -5,6 +5,7 @@ import {
   ManyToOne,
   JoinColumn,
   CreateDateColumn,
+  RelationId,
 } from 'typeorm';
 import { User } from './users.entity';
 import { IsNotEmpty } from 'class-validator';
@@ -18,10 +19,14 @@ export class Password {
   @Column()
   passwords: string;
 
-  @CreateDateColumn() d;
+  @CreateDateColumn()
   timestamp: Date;
 
   @ManyToOne(() => User, (user) => user.password)
   @JoinColumn()
   user: User;
+
+  @RelationId((password: Password) => password.user)
+  @Column()
+  userId: number;
 }

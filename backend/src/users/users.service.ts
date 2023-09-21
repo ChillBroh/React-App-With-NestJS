@@ -3,11 +3,14 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common';
 import { User } from './models/users.entity';
 import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Password } from './models/password.entity';
+import { AuthGuard } from 'src/auth/guards/jwt.guard';
+import { json } from 'node:stream/consumers';
 
 @Injectable()
 export class UsersService {
@@ -56,6 +59,7 @@ export class UsersService {
     }
   }
 
+  @UseGuards(AuthGuard)
   //get user list
   async getAllUsers(): Promise<User[] | undefined> {
     try {
@@ -85,12 +89,15 @@ export class UsersService {
   }
 
   //update user
+
   async updateUser(user: User, id: number): Promise<any> {
     try {
+      console.log(user);
       const response = await this.dataSource
         .getRepository(User)
         .update(id, user);
-
+      console.log(typeof id, id);
+      console.log(response);
       if (response.affected === 0) {
         throw new Error();
       }
@@ -109,9 +116,9 @@ export class UsersService {
         throw new Error();
       }
 
-      const response = await this.dataSource.getRepository(User).delete(id);
+      const responseUser = await this.dataSource.getRepository(User).delete(id);
 
-      if (response.affected === 0) {
+      if (responseUser.affected === 0) {
         throw new Error();
       }
       return 'User Deleted';
@@ -137,7 +144,7 @@ export class UsersService {
     if (user) {
       const password = await this.dataSource.getRepository(Password).find({
         where: { user: user },
-        order: { d: 'DESC' },
+        order: { timestamp: 'DESC' },
       });
 
       const latestPassword = password[0];
@@ -153,11 +160,10 @@ export class UsersService {
         .getRepository(User)
         .findOneBy({ email });
       const hash = await this.hashedPassword(password);
-      console.log('case nah');
 
       const passwords = await this.dataSource
         .getRepository(password)
-        .findBy({ user });
+        .findBy({ userId: user.id });
       console.log(passwords);
 
       const savedPassword = await this.dataSource

@@ -2,11 +2,11 @@ import { LockOutlined } from "@ant-design/icons";
 import { Form, Input } from "antd";
 import Button from "../components/Button";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const InputResetPass = () => {
+const InputResetPass = (props: any) => {
   const navigate = useNavigate();
-  const { email } = useParams();
+  const email: string = props.mail;
   const [form] = Form.useForm();
 
   const handleSubmit = async (value: any) => {
@@ -26,12 +26,14 @@ const InputResetPass = () => {
     navigate("/login");
   };
   return (
-    <div className="mt-16 mx-auto max-w-2xl px-4 py-10 sm:px-4 sm:py-15 lg:max-w-7xl lg:px-8">
-      <p className="text-3xl text-center mb-10">Login</p>
+    <div className="mt-16 mx-auto max-w-2xl px-4  sm:px-4  lg:max-w-7xl lg:px-8">
+      <p className="text-3xl text-center mb-10">
+        Enter Your New Password {props.username}
+      </p>
       <div className="flex  justify-center">
         <Form
           form={form}
-          name="normal_login"
+          name="enter pass"
           className="login-form"
           initialValues={{ remember: true }}
           onFinish={handleSubmit}

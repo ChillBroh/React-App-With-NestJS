@@ -1,26 +1,29 @@
-import React, { useEffect } from "react";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Checkbox, Form, Input } from "antd";
-import Link from "antd/es/typography/Link";
+import { UserOutlined } from "@ant-design/icons";
+import { Form, Input } from "antd";
 import Button from "../components/Button";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+
+import InputResetPass from "./InputResetPass";
+import { useState } from "react";
 
 const ResetPassword = () => {
-  const navigate = useNavigate();
   const [form] = Form.useForm();
+  const [email, setEmail] = useState("");
+  const [show, setShow] = useState(false);
+  const [user, setUser] = useState("");
 
   const handleSubmit = async (value: any) => {
     try {
       const { email } = value;
       const response = await axios.post(
-        "http://localhost:5000/users/reset/email-find",
+        "http://localhost:5000/auth/reset/email-find",
         {
           email,
         }
       );
-
-      navigate(`/password-enter/${email}`);
+      setUser(response.data.userName);
+      setEmail(email);
+      setShow(true);
     } catch (err: any) {
       alert(err.response.data.message);
       return;
@@ -59,6 +62,11 @@ const ResetPassword = () => {
             <Button name="Find Acoount" type="submit" />
           </Form.Item>
         </Form>
+        {show ? (
+          <InputResetPass mail={email} username={user.toUpperCase()} />
+        ) : (
+          "enter your email"
+        )}
       </div>
     </div>
   );
