@@ -13,6 +13,7 @@ import { Password } from './models/password.entity';
 export class UsersService {
   constructor(private readonly dataSource: DataSource) {}
 
+  //hashing password
   async hashedPassword(password: string): Promise<string> {
     const saltOrRounds = 10;
 
@@ -23,6 +24,7 @@ export class UsersService {
     return hash;
   }
 
+  //create a user
   async createUser(user: User): Promise<string> {
     try {
       const pass: any = user.password;
@@ -38,7 +40,7 @@ export class UsersService {
 
       const response = await this.dataSource.getRepository(User).save(newUser);
 
-      //savve hashed passwrd to db
+      //savve hashed passwrd to db password table
       const newPassword = await this.dataSource.getRepository(Password).create({
         passwords: hash,
         user: response,
@@ -54,6 +56,7 @@ export class UsersService {
     }
   }
 
+  //get user list
   async getAllUsers(): Promise<User[] | undefined> {
     try {
       const response = await this.dataSource.getRepository(User).find();
@@ -66,6 +69,7 @@ export class UsersService {
     }
   }
 
+  //get only one user
   async getOneUser(id: number): Promise<User | undefined> {
     try {
       const response = await this.dataSource
@@ -80,6 +84,7 @@ export class UsersService {
     }
   }
 
+  //update user
   async updateUser(user: User, id: number): Promise<any> {
     try {
       const response = await this.dataSource
@@ -96,6 +101,7 @@ export class UsersService {
     }
   }
 
+  //delete user
   async deleteUser(id: number): Promise<string> {
     try {
       const user = this.getOneUser(id);
@@ -114,6 +120,7 @@ export class UsersService {
     }
   }
 
+  //find user by email
   async findOneByEmail(email: string): Promise<User> {
     const user = await this.dataSource.getRepository(User).findOneBy({ email });
     if (user === null) {
@@ -123,6 +130,7 @@ export class UsersService {
     return user;
   }
 
+  //get passwords by using email
   async getPassByEmail(email: string): Promise<Password | undefined> {
     const user = await this.findOneByEmail(email);
 
@@ -138,13 +146,19 @@ export class UsersService {
 
     return undefined;
   }
-
+  //reset user password
   async passwordRest(email: string, password: string): Promise<Password> {
     try {
       const user = await this.dataSource
         .getRepository(User)
         .findOneBy({ email });
       const hash = await this.hashedPassword(password);
+      console.log('case nah');
+
+      const passwords = await this.dataSource
+        .getRepository(password)
+        .findBy({ user });
+      console.log(passwords);
 
       const savedPassword = await this.dataSource
         .getRepository(Password)
