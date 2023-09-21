@@ -31,12 +31,6 @@ export class UsersController {
     return response;
   }
 
-  @Post('reset/email-find')
-  async getEmailUser(@Body('email') email: string) {
-    const response = await this.userService.findOneByEmail(email);
-    return response;
-  }
-
   @Patch(':id')
   async updateUser(@Body() user: User, @Param() id: number) {
     const response = await this.userService.updateUser(user, id);
@@ -57,10 +51,4 @@ export class UsersController {
     const response = await this.userService.passwordRest(email, password);
     return response;
   }
-
-  // @Post('login/check-pass')
-  // async passwordGet(@Body() user: User) {
-  //   const response = await this.userService.customQueryToGetPassword(user);
-  //   return response;
-  // }
 }

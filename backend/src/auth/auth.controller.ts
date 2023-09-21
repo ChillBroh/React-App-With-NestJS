@@ -13,4 +13,10 @@ export class AuthController {
     const response = this.authService.signIn(email, password);
     return response;
   }
+
+  @Post('reset/email-find')
+  async getEmailUser(@Body('email') email: string) {
+    const response = await this.authService.findOne(email);
+    return response;
+  }
 }
